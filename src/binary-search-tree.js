@@ -1,116 +1,75 @@
-// const { NotImplementedError } = require('../extensions/index.js');
+const { NotImplementedError } = require('../extensions/index.js');
 
-// // const { Node } = require('../extensions/list-tree.js');
+const { Node } = require('../extensions/list-tree.js');
 
-// /**
-// * Implement simple binary search tree according to task description
-// * using Node from extensions
-// */
-// class BinarySearchTree {
-
-//   root() {
-//     throw new NotImplementedError('Not implemented');
-//     // remove line with error and write your code here
-//   }
-
-//   add(/* data */) {
-//     throw new NotImplementedError('Not implemented');
-//     // remove line with error and write your code here
-//   }
-
-//   has(/* data */) {
-//     throw new NotImplementedError('Not implemented');
-//     // remove line with error and write your code here
-//   }
-
-//   find(/* data */) {
-//     throw new NotImplementedError('Not implemented');
-//     // remove line with error and write your code here
-//   }
-
-//   remove(/* data */) {
-//     throw new NotImplementedError('Not implemented');
-//     // remove line with error and write your code here
-//   }
-
-//   min() {
-//     throw new NotImplementedError('Not implemented');
-//     // remove line with error and write your code here
-//   }
-
-//   max() {
-//     throw new NotImplementedError('Not implemented');
-//     // remove line with error and write your code here
-//   }
-// }
-
-// module.exports = {
-//   BinarySearchTree
-// };
-
-class Node {
-  constructor(value) {
-    this.value = value;
-    this.left = null;
-    this.right = null;
-  }
-}
-
+/**
+* Implement simple binary search tree according to task description
+* using Node from extensions
+*/
 class BinarySearchTree {
   constructor() {
     this.root = null;
   }
 
-  add(value) {
-    this.root = addWithin(this.root, value); 
+  root() {
+    return this.root;
+  }
+
+  add(data) {
+    this.root = addWithin(this.root, data); 
     
-    function addWithin(node, value) {
+    function addWithin(node, data) {
       if (!node) {
-        return new Node(value);
+        return new Node(data);
       }
-      if (node.value === value) {
+      if (node.data === data) {
         return node;
       }
-      if (value < node.value) {
-        node.left = addWithin(node.left, value);
+      if (data < node.data) {
+        node.left = addWithin(node.left, data);
       } else {
-        node.right = addWithin(node.right, value);
+        node.right = addWithin(node.right, data);
       }
       return node;
     }
   }
 
-  has(value) {
-    return searchWithin(this.root,value);
+  has(data) {
+    return searchWithin(this.root,data);
 
-    function searchWithin(node, value) {
+    function searchWithin(node, data) {
       if (!node) {
         return false;
       }
 
-      if (node.value === value) {
+      if (node.data === data) {
         return true;
       }
 
-      return value < node.value ?
-        searchWithin(node.left, value) :
-        searchWithin(node.right, value) ;
+      return data < node.data ?
+        searchWithin(node.left, data) :
+        searchWithin(node.right, data) ;
     }
   }
 
-  remove(value) {
-    this.root = removeNode(this.root, value);
+  find(data) {
+    throw new NotImplementedError('Not implemented');
+    // remove line with error and write your code here
+  }
 
-    function removeNode(node, value) {
+  remove(data) {
+    this.root = removeNode(this.root, data);
+
+    function removeNode(node, data) {
       if (!node) {
         return null;
       }
 
-      if (value < node.value) {
-        node.left = removeNode(node.left, value);
+      if (data < node.data) {
+        node.left = removeNode(node.left, data);
         return node;
-      } else if (node.value < value) {
-        node.right = removeNode(node.right, value);
+      } else if (node.data < data) {
+        node.right = removeNode(node.right, data);
         return node;
       } else {
         if (!node.left && !node.right) {
@@ -128,12 +87,12 @@ class BinarySearchTree {
         }
 
         let minFromRight = node.right;
-        while (minFromRight.value) {
+        while (minFromRight.data) {
           minFromRight = minFromRight.left;
         }
-        node.value = minFromRight.value;
+        node.data = minFromRight.data;
 
-        node.right = removeNode(node.right, minFromRight.value);
+        node.right = removeNode(node.right, minFromRight.data);
 
         return node;
       }
@@ -150,7 +109,7 @@ class BinarySearchTree {
       node = node.left;
     }
 
-    return node.value;
+    return node.data;
   }
 
   max() {
@@ -163,79 +122,10 @@ class BinarySearchTree {
       node = node.right;
     }
 
-    return node.value;
-  }
-
-  leftTraverse(cb) {
-    doLeft(this.root, cb);
-
-    function doLeft(node, cb) {
-      if (node) {
-        doLeft(node.left, cb);
-        cb(node.value);
-        doLeft(node.right, cb);
-      }
-    }
-  }
-
-  rightTraverse(cb) {
-    doRight(this.root, cb);
-
-    function doRight(node, cb) {
-      if (node) {
-        doRight(node.right, cb);
-        cb(node.value);
-        doRight(node.left, cb);
-      }
-    }
+    return node.data;
   }
 }
 
-console.log('(BinarySearchTree)');
-
-function addItems() {
-  console.log('\n Add Items');
-  console.log('add 13, 15, 9, 20, 18, 32, 25 ');
-
-  bst.add(13);
-  bst.add(15);
-  bst.add(9);
-  bst.add(20);
-  bst.add(18);
-  bst.add(32);
-  bst.add(25);
-}
-
-function addItems() {
-  console.log('\n Get Items');
-
-  console.log('has 10', bst.has(10));
-  console.log('has 15', bst.has(15));
-  console.log('\n', bst);
-
-  console.log('  Left Traverse:');
-  bst.leftTraverse((val) => console.log(val));
-
-  console.log('  Right Traverse:');
-  bst.rightTraverse((val) => console.log(val));
-
-  console.log('min:', bst.min());
-  console.log('max:', bst.max());
-}
-
-function removeItems() {
-  console.log('  Remove Items');
-
-  bst.remove(15);
-  console.log('remove 15');
-  console.log(bst);
-
-  console.log('   Left Traverse:');
-  bst.leftTraverse((val) => console.log(val));
-}
-
-const bst = new BinarySearchTree();
-
-addItems();
-addItems();
-removeItems();
+module.exports = {
+  BinarySearchTree
+};
